@@ -1,0 +1,186 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "DraggableImageView"
+provides-nominal:
+- "C7Joiners18DraggableImageView"
+provides-member:
+- ["C7Joiners18DraggableImageView", ""]
+provides-dynamic-lookup:
+- "verticalConstraint"
+- "horizontalConstraint"
+depends-top-level:
+- "NSLayoutConstraint"
+- "DraggableImageView"
+- "UIImageView"
+depends-member:
+- ["Ps9AnyObject", "NSLayoutConstraint"]
+- ["Ps9AnyObject", "horizontalConstraint"]
+- ["Ps9AnyObject", "init"]
+- ["Ps9AnyObject", "verticalConstraint"]
+- ["Ps9AnyObject", ""]
+- ["PSo15CALayerDelegate", "NSLayoutConstraint"]
+- ["PSo15CALayerDelegate", "horizontalConstraint"]
+- !private ["PSo15CALayerDelegate", "init"]
+- ["PSo15CALayerDelegate", "verticalConstraint"]
+- ["PSo15CALayerDelegate", ""]
+- ["VSC6CGRect", "deinit"]
+- ["Ps7CVarArg", "NSLayoutConstraint"]
+- ["Ps7CVarArg", "horizontalConstraint"]
+- ["Ps7CVarArg", "init"]
+- ["Ps7CVarArg", "verticalConstraint"]
+- ["Ps7CVarArg", ""]
+- ["Ps28CustomDebugStringConvertible", "NSLayoutConstraint"]
+- ["Ps28CustomDebugStringConvertible", "horizontalConstraint"]
+- ["Ps28CustomDebugStringConvertible", "init"]
+- ["Ps28CustomDebugStringConvertible", "verticalConstraint"]
+- ["Ps28CustomDebugStringConvertible", ""]
+- ["Ps23CustomStringConvertible", "NSLayoutConstraint"]
+- ["Ps23CustomStringConvertible", "horizontalConstraint"]
+- ["Ps23CustomStringConvertible", "init"]
+- ["Ps23CustomStringConvertible", "verticalConstraint"]
+- ["Ps23CustomStringConvertible", ""]
+- ["C7Joiners18DraggableImageView", "NSLayoutConstraint"]
+- ["C7Joiners18DraggableImageView", "deinit"]
+- ["C7Joiners18DraggableImageView", "horizontalConstraint"]
+- ["C7Joiners18DraggableImageView", "init"]
+- ["C7Joiners18DraggableImageView", "verticalConstraint"]
+- ["Ps9Equatable", "NSLayoutConstraint"]
+- ["Ps9Equatable", "horizontalConstraint"]
+- ["Ps9Equatable", "init"]
+- ["Ps9Equatable", "verticalConstraint"]
+- ["Ps9Equatable", ""]
+- ["Ps8Hashable", "NSLayoutConstraint"]
+- ["Ps8Hashable", "horizontalConstraint"]
+- ["Ps8Hashable", "init"]
+- ["Ps8Hashable", "verticalConstraint"]
+- ["Ps8Hashable", ""]
+- ["CSo7NSCoder", "deinit"]
+- ["PSo8NSCoding", "NSLayoutConstraint"]
+- ["PSo8NSCoding", "horizontalConstraint"]
+- !private ["PSo8NSCoding", "init"]
+- ["PSo8NSCoding", "verticalConstraint"]
+- ["PSo8NSCoding", ""]
+- ["CSo18NSLayoutConstraint", "deinit"]
+- ["CSo18NSLayoutConstraint", "init"]
+- ["CSo8NSObject", "NSLayoutConstraint"]
+- ["CSo8NSObject", "horizontalConstraint"]
+- ["CSo8NSObject", "init"]
+- ["CSo8NSObject", "verticalConstraint"]
+- ["PSo16NSObjectProtocol", "NSLayoutConstraint"]
+- ["PSo16NSObjectProtocol", "horizontalConstraint"]
+- ["PSo16NSObjectProtocol", "init"]
+- ["PSo16NSObjectProtocol", "verticalConstraint"]
+- ["PSo16NSObjectProtocol", ""]
+- ["Sq", "deinit"]
+- ["PSo29UIAccessibilityIdentification", "NSLayoutConstraint"]
+- ["PSo29UIAccessibilityIdentification", "horizontalConstraint"]
+- !private ["PSo29UIAccessibilityIdentification", "init"]
+- ["PSo29UIAccessibilityIdentification", "verticalConstraint"]
+- ["PSo29UIAccessibilityIdentification", ""]
+- ["PSo12UIAppearance", "NSLayoutConstraint"]
+- ["PSo12UIAppearance", "horizontalConstraint"]
+- !private ["PSo12UIAppearance", "init"]
+- ["PSo12UIAppearance", "verticalConstraint"]
+- ["PSo12UIAppearance", ""]
+- ["PSo21UIAppearanceContainer", "NSLayoutConstraint"]
+- ["PSo21UIAppearanceContainer", "horizontalConstraint"]
+- !private ["PSo21UIAppearanceContainer", "init"]
+- ["PSo21UIAppearanceContainer", "verticalConstraint"]
+- ["PSo21UIAppearanceContainer", ""]
+- ["PSo17UICoordinateSpace", "NSLayoutConstraint"]
+- ["PSo17UICoordinateSpace", "horizontalConstraint"]
+- !private ["PSo17UICoordinateSpace", "init"]
+- ["PSo17UICoordinateSpace", "verticalConstraint"]
+- ["PSo17UICoordinateSpace", ""]
+- ["PSo13UIDynamicItem", "NSLayoutConstraint"]
+- ["PSo13UIDynamicItem", "horizontalConstraint"]
+- !private ["PSo13UIDynamicItem", "init"]
+- ["PSo13UIDynamicItem", "verticalConstraint"]
+- ["PSo13UIDynamicItem", ""]
+- ["PSo18UIFocusEnvironment", "NSLayoutConstraint"]
+- ["PSo18UIFocusEnvironment", "horizontalConstraint"]
+- !private ["PSo18UIFocusEnvironment", "init"]
+- ["PSo18UIFocusEnvironment", "verticalConstraint"]
+- ["PSo18UIFocusEnvironment", ""]
+- ["PSo11UIFocusItem", "NSLayoutConstraint"]
+- ["PSo11UIFocusItem", "horizontalConstraint"]
+- !private ["PSo11UIFocusItem", "init"]
+- ["PSo11UIFocusItem", "verticalConstraint"]
+- ["PSo11UIFocusItem", ""]
+- ["CSo11UIImageView", "NSLayoutConstraint"]
+- ["CSo11UIImageView", "deinit"]
+- ["CSo11UIImageView", "horizontalConstraint"]
+- ["CSo11UIImageView", "init"]
+- ["CSo11UIImageView", "verticalConstraint"]
+- ["CSo11UIImageView", ""]
+- ["CSo11UIResponder", "NSLayoutConstraint"]
+- ["CSo11UIResponder", "horizontalConstraint"]
+- ["CSo11UIResponder", "init"]
+- ["CSo11UIResponder", "verticalConstraint"]
+- ["PSo30UIResponderStandardEditActions", "NSLayoutConstraint"]
+- ["PSo30UIResponderStandardEditActions", "horizontalConstraint"]
+- !private ["PSo30UIResponderStandardEditActions", "init"]
+- ["PSo30UIResponderStandardEditActions", "verticalConstraint"]
+- ["PSo30UIResponderStandardEditActions", ""]
+- ["PSo18UITraitEnvironment", "NSLayoutConstraint"]
+- ["PSo18UITraitEnvironment", "horizontalConstraint"]
+- !private ["PSo18UITraitEnvironment", "init"]
+- ["PSo18UITraitEnvironment", "verticalConstraint"]
+- ["PSo18UITraitEnvironment", ""]
+- ["CSo6UIView", "NSLayoutConstraint"]
+- ["CSo6UIView", "horizontalConstraint"]
+- ["CSo6UIView", "init"]
+- ["CSo6UIView", "verticalConstraint"]
+- ["Ps37_DefaultCustomPlaygroundQuickLookable", "NSLayoutConstraint"]
+- ["Ps37_DefaultCustomPlaygroundQuickLookable", "horizontalConstraint"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "init"]
+- ["Ps37_DefaultCustomPlaygroundQuickLookable", "verticalConstraint"]
+- ["Ps37_DefaultCustomPlaygroundQuickLookable", ""]
+- ["Ps9_Hashable", "NSLayoutConstraint"]
+- ["Ps9_Hashable", "horizontalConstraint"]
+- ["Ps9_Hashable", "init"]
+- ["Ps9_Hashable", "verticalConstraint"]
+- ["Ps9_Hashable", ""]
+depends-nominal:
+- "Ps9AnyObject"
+- "PSo15CALayerDelegate"
+- "VSC6CGRect"
+- "Ps7CVarArg"
+- "Ps28CustomDebugStringConvertible"
+- "Ps23CustomStringConvertible"
+- "C7Joiners18DraggableImageView"
+- "Ps9Equatable"
+- "Ps8Hashable"
+- "CSo7NSCoder"
+- "PSo8NSCoding"
+- "CSo18NSLayoutConstraint"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- "Sq"
+- "PSo29UIAccessibilityIdentification"
+- "PSo12UIAppearance"
+- "PSo21UIAppearanceContainer"
+- "PSo17UICoordinateSpace"
+- "PSo13UIDynamicItem"
+- "PSo18UIFocusEnvironment"
+- "PSo11UIFocusItem"
+- "CSo11UIImageView"
+- "CSo11UIResponder"
+- "PSo30UIResponderStandardEditActions"
+- "PSo18UITraitEnvironment"
+- "CSo6UIView"
+- "Ps37_DefaultCustomPlaygroundQuickLookable"
+- "Ps9_Hashable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreImage.swiftmodule"
+interface-hash: "4e029b0df72a6cf1a18517ec5af26bd0"

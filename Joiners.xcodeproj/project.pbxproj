@@ -9,19 +9,21 @@
 /* Begin PBXBuildFile section */
 		D01DA8CA1DC958CA00C3A4D6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01DA8C91DC958CA00C3A4D6 /* AppDelegate.swift */; };
 		D01DA8CC1DC958CA00C3A4D6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01DA8CB1DC958CA00C3A4D6 /* ViewController.swift */; };
-		D01DA8CF1DC958CA00C3A4D6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8CD1DC958CA00C3A4D6 /* Main.storyboard */; };
 		D01DA8D11DC958CA00C3A4D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */; };
 		D01DA8D41DC958CA00C3A4D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */; };
+		D01DA8DC1DC95ED700C3A4D6 /* vapeNaysh.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */; };
+		D02521271DCD570A006A4C4B /* DraggableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02521261DCD570A006A4C4B /* DraggableImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D01DA8C61DC958CA00C3A4D6 /* Joiners.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joiners.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D01DA8C91DC958CA00C3A4D6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D01DA8CB1DC958CA00C3A4D6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D01DA8CE1DC958CA00C3A4D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D01DA8D31DC958CA00C3A4D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D01DA8D51DC958CA00C3A4D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = vapeNaysh.jpeg; sourceTree = "<group>"; };
+		D02521261DCD570A006A4C4B /* DraggableImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,12 +58,21 @@
 			children = (
 				D01DA8C91DC958CA00C3A4D6 /* AppDelegate.swift */,
 				D01DA8CB1DC958CA00C3A4D6 /* ViewController.swift */,
-				D01DA8CD1DC958CA00C3A4D6 /* Main.storyboard */,
 				D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */,
+				D01DA8DE1DC95EFA00C3A4D6 /* Resources */,
 				D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */,
 				D01DA8D51DC958CA00C3A4D6 /* Info.plist */,
+				D02521261DCD570A006A4C4B /* DraggableImageView.swift */,
 			);
 			path = Joiners;
+			sourceTree = "<group>";
+		};
+		D01DA8DE1DC95EFA00C3A4D6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,9 +135,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D01DA8DC1DC95ED700C3A4D6 /* vapeNaysh.jpeg in Resources */,
 				D01DA8D41DC958CA00C3A4D6 /* LaunchScreen.storyboard in Resources */,
 				D01DA8D11DC958CA00C3A4D6 /* Assets.xcassets in Resources */,
-				D01DA8CF1DC958CA00C3A4D6 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D01DA8CC1DC958CA00C3A4D6 /* ViewController.swift in Sources */,
+				D02521271DCD570A006A4C4B /* DraggableImageView.swift in Sources */,
 				D01DA8CA1DC958CA00C3A4D6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -145,14 +157,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		D01DA8CD1DC958CA00C3A4D6 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D01DA8CE1DC958CA00C3A4D6 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -302,6 +306,7 @@
 				D01DA8DA1DC958CA00C3A4D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
