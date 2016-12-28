@@ -1,7 +1,0 @@
-version: "Apple Swift version 3.0.2 (swiftlang-800.0.63 clang-800.0.42.1)"
-options: "637f6f69ca20d2fc07e1ed3fd8dce2c4"
-build_time: [535598359, 925981000]
-inputs:
-  "/Users/Peter/Code/Joiners/Joiners/ViewController.swift": [535598359, 0]
-  "/Users/Peter/Code/Joiners/Joiners/DraggableImageView.swift": [531619266, 0]
-  "/Users/Peter/Code/Joiners/Joiners/AppDelegate.swift": [531618652, 0]
