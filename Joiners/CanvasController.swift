@@ -31,7 +31,6 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     
     var startPoint = CGPoint.zero
     func moveImage(gesture: UIPanGestureRecognizer) {
-       
         guard let imageView = gesture.view as? DraggableImageView else {
             print("View not draggable image")
             return
@@ -41,11 +40,11 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         switch gesture.state {
         case .began:
             startPoint = translation
-//            print("Start: \(startPoint)")
         case .changed:
             guard let imageSuperView = imageView.superview else {
                 return
             }
+            
             // only update the horizontal position of the imageView if it isn't going to go halfway off the side
             let xDelta = imageView.frame.origin.x + (translation.x - startPoint.x)
             let halfWidth = imageView.frame.size.width / 2
@@ -53,6 +52,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
                 imageView.horizontalConstraint.constant += translation.x - startPoint.x
                 startPoint.x = translation.x
             }
+            
             // only update the vertical position of the imageView if it isn't going to go halfway off the top or bottom
             let yDelta = imageView.frame.origin.y + (translation.y - startPoint.y)
             let halfHeight = imageView.frame.size.height / 2
@@ -60,19 +60,12 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
                 imageView.verticalConstraint.constant += translation.y - startPoint.y
                 startPoint.y = translation.y
             }
-//            print("DeltaX: \(xDelta)")
-//            print("DeltaY: \(yDelta)")
-//            print("Super height: \(imageSuperView.frame.height)")
-//            print("Super width: \(imageSuperView.frame.width)")
             break
         case .ended:
             break
         default:
             break
         }
-        
-//        print("gesture: \(translation)")
-//        print("Velocity: \(gesture.velocity(in: view))")
     }
     
     func scaleImage(gesture: UIPinchGestureRecognizer) {
@@ -129,13 +122,9 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         imageView.horizontalConstraint.isActive = true
         imageView.verticalConstraint.isActive = true
         
-        
         let views: [String : Any] = [ "image": imageView, "topLayoutGuide": topLayoutGuide ]
         let imageSize = imageView.intrinsicContentSize
         let metrics = [ "height": imageSize.height, "width": imageSize.width ]
-            
-//        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:[topLayoutGuide]-(>=0)-[image]-(>=0)-|", options: [], metrics: nil, views: views))
-//        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=0)-[image]-(>=0)-|", options: [], metrics: nil, views: views))
         
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:[image(==height)]", options: [], metrics: metrics, views: views))
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:[image(==width)]", options: [], metrics: metrics, views: views))
