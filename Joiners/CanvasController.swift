@@ -41,7 +41,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         switch gesture.state {
         case .began:
             startPoint = translation
-            print("Start: \(startPoint)")
+//            print("Start: \(startPoint)")
         case .changed:
             guard let imageSuperView = imageView.superview else {
                 return
@@ -60,10 +60,10 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
                 imageView.verticalConstraint.constant += translation.y - startPoint.y
                 startPoint.y = translation.y
             }
-            print("DeltaX: \(xDelta)")
-            print("DeltaY: \(yDelta)")
-            print("Super height: \(imageSuperView.frame.height)")
-            print("Super width: \(imageSuperView.frame.width)")
+//            print("DeltaX: \(xDelta)")
+//            print("DeltaY: \(yDelta)")
+//            print("Super height: \(imageSuperView.frame.height)")
+//            print("Super width: \(imageSuperView.frame.width)")
             break
         case .ended:
             break
@@ -71,8 +71,18 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             break
         }
         
-        print("gesture: \(translation)")
-        print("Velocity: \(gesture.velocity(in: view))")
+//        print("gesture: \(translation)")
+//        print("Velocity: \(gesture.velocity(in: view))")
+    }
+    
+    func scaleImage(gesture: UIPinchGestureRecognizer) {
+        
+        guard let gestureView = gesture.view else {
+            return
+        }
+        
+        gestureView.transform = gestureView.transform.scaledBy(x: gesture.scale, y: gesture.scale)
+        gesture.scale = 1;
     }
     
     func pickImage() {
@@ -124,6 +134,9 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.moveImage(gesture:)))
         imageView.addGestureRecognizer(panGesture)
+        
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.scaleImage(gesture:)))
+        imageView.addGestureRecognizer(pinchGesture)
     }
     
     
