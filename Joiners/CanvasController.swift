@@ -76,13 +76,21 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     }
     
     func scaleImage(gesture: UIPinchGestureRecognizer) {
-        
         guard let gestureView = gesture.view else {
             return
         }
         
         gestureView.transform = gestureView.transform.scaledBy(x: gesture.scale, y: gesture.scale)
         gesture.scale = 1;
+    }
+    
+    func rotateImage(gesture: UIRotationGestureRecognizer) {
+        guard let gestureView = gesture.view else {
+            return
+        }
+        
+        gestureView.transform = gestureView.transform.rotated(by: gesture.rotation)
+        gesture.rotation = 0;
     }
     
     func pickImage() {
@@ -132,11 +140,14 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:[image(==height)]", options: [], metrics: metrics, views: views))
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:[image(==width)]", options: [], metrics: metrics, views: views))
         
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.moveImage(gesture:)))
-        imageView.addGestureRecognizer(panGesture)
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(self.moveImage(gesture:)))
+        imageView.addGestureRecognizer(pan)
         
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.scaleImage(gesture:)))
-        imageView.addGestureRecognizer(pinchGesture)
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(self.scaleImage(gesture:)))
+        imageView.addGestureRecognizer(pinch)
+        
+        let rotate = UIRotationGestureRecognizer(target: self, action: #selector(self.rotateImage(gesture:)))
+        imageView.addGestureRecognizer(rotate)
     }
     
     
