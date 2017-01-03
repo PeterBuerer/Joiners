@@ -160,7 +160,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         
         imageView.addGestureRecognizer(pan)
         imageView.addGestureRecognizer(pinch)
-        imageView.addGestureRecognizer(rotate)
+        imageView.addGestureRecognizer(rotate) 
         imageView.addGestureRecognizer(tap)
     }
     
