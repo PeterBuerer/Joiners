@@ -12,7 +12,7 @@
 		D01DA8D11DC958CA00C3A4D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */; };
 		D01DA8D41DC958CA00C3A4D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */; };
 		D01DA8DC1DC95ED700C3A4D6 /* vapeNaysh.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */; };
-		D02521271DCD570A006A4C4B /* DraggableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02521261DCD570A006A4C4B /* DraggableImageView.swift */; };
+		D02521271DCD570A006A4C4B /* JoinerImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02521261DCD570A006A4C4B /* JoinerImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +23,7 @@
 		D01DA8D31DC958CA00C3A4D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D01DA8D51DC958CA00C3A4D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = vapeNaysh.jpeg; sourceTree = "<group>"; };
-		D02521261DCD570A006A4C4B /* DraggableImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraggableImageView.swift; sourceTree = "<group>"; };
+		D02521261DCD570A006A4C4B /* JoinerImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinerImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +62,7 @@
 				D01DA8DE1DC95EFA00C3A4D6 /* Resources */,
 				D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */,
 				D01DA8D51DC958CA00C3A4D6 /* Info.plist */,
-				D02521261DCD570A006A4C4B /* DraggableImageView.swift */,
+				D02521261DCD570A006A4C4B /* JoinerImageView.swift */,
 			);
 			path = Joiners;
 			sourceTree = "<group>";
@@ -149,7 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D01DA8CC1DC958CA00C3A4D6 /* CanvasController.swift in Sources */,
-				D02521271DCD570A006A4C4B /* DraggableImageView.swift in Sources */,
+				D02521271DCD570A006A4C4B /* JoinerImageView.swift in Sources */,
 				D01DA8CA1DC958CA00C3A4D6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

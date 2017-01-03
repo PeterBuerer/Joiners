@@ -10,10 +10,16 @@ import UIKit
 
 class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    private var selectedImage: JoinerImageView?
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         let addItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(pickImage))
+        let resetItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(resetImage)) 
+        
         navigationItem.rightBarButtonItem = addItem
+        navigationItem.leftBarButtonItem = resetItem
+        
         // make sure that the view doesn't extend up under navigation bar
         edgesForExtendedLayout = UIRectEdge(rawValue: 0)
     }
@@ -31,8 +37,8 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     
     var startPoint = CGPoint.zero
     func moveImage(gesture: UIPanGestureRecognizer) {
-        guard let imageView = gesture.view as? DraggableImageView else {
-            print("View not draggable image")
+        guard let imageView = gesture.view as? JoinerImageView, imageView.selected else {
+            print("View not Joiner image")
             return
         }
         
@@ -69,21 +75,32 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     }
     
     func scaleImage(gesture: UIPinchGestureRecognizer) {
-        guard let gestureView = gesture.view else {
+        guard let imageView = gesture.view as? JoinerImageView, imageView.selected else {
             return
         }
         
-        gestureView.transform = gestureView.transform.scaledBy(x: gesture.scale, y: gesture.scale)
+        imageView.transform = imageView.transform.scaledBy(x: gesture.scale, y: gesture.scale)
         gesture.scale = 1;
     }
     
     func rotateImage(gesture: UIRotationGestureRecognizer) {
-        guard let gestureView = gesture.view else {
+        guard let imageView = gesture.view as? JoinerImageView, imageView.selected else {
             return
         }
         
-        gestureView.transform = gestureView.transform.rotated(by: gesture.rotation)
+        imageView.transform = imageView.transform.rotated(by: gesture.rotation)
         gesture.rotation = 0;
+    }
+    
+    func selectImage(gesture: UITapGestureRecognizer) {
+        guard let imageView = gesture.view as? JoinerImageView else {
+            print("View not Joiner image")
+            return
+        }
+        
+        selectedImage?.selected = false
+        imageView.selected = true
+        selectedImage = imageView
     }
     
     func pickImage() {
@@ -106,9 +123,16 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         //     present(imagePickerController, animated: true, completion: nil)
         // }
     }
+    
+    // remove all transforms on the selected image and place it in the center of the screen
+    func resetImage() {
+        selectedImage?.horizontalConstraint.constant = 0
+        selectedImage?.verticalConstraint.constant = 0
+        selectedImage?.transform = .identity
+    }
    
     func add(image: UIImage) {
-        let imageView = DraggableImageView()
+        let imageView = JoinerImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
         imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
@@ -129,14 +153,15 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:[image(==height)]", options: [], metrics: metrics, views: views))
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:[image(==width)]", options: [], metrics: metrics, views: views))
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(self.moveImage(gesture:)))
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(moveImage(gesture:)))
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(scaleImage(gesture:)))
+        let rotate = UIRotationGestureRecognizer(target: self, action: #selector(rotateImage(gesture:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(selectImage(gesture:)))
+        
         imageView.addGestureRecognizer(pan)
-        
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(self.scaleImage(gesture:)))
         imageView.addGestureRecognizer(pinch)
-        
-        let rotate = UIRotationGestureRecognizer(target: self, action: #selector(self.rotateImage(gesture:)))
         imageView.addGestureRecognizer(rotate)
+        imageView.addGestureRecognizer(tap)
     }
     
     
