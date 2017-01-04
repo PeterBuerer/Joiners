@@ -7,17 +7,20 @@
 //
 
 import UIKit
+import AVFoundation
+import Photos
 
-class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     private var selectedImage: JoinerImageView?
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        let addItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(pickImage))
+        let addItem = UIBarButtonItem(title: "Library", style: .plain, target: self, action: #selector(pickImage))
+        let takePhotoItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(takePhoto))
         let resetItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(resetImage)) 
         
-        navigationItem.rightBarButtonItem = addItem
+        let rightItems = [takePhotoItem, addItem]
+        navigationItem.rightBarButtonItems = rightItems
         navigationItem.leftBarButtonItem = resetItem
         
         // make sure that the view doesn't extend up under navigation bar
@@ -30,7 +33,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .blue
+        view.backgroundColor = .white
     }
     
     // MARK: - Actions
@@ -97,31 +100,88 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             print("View not Joiner image")
             return
         }
-        
+        select(imageView: imageView);
+    }
+    
+    func select(imageView: JoinerImageView) {
         selectedImage?.selected = false
         imageView.selected = true
         selectedImage = imageView
     }
     
-    func pickImage() {
-        guard let image = UIImage(named:"vapeNaysh.jpeg") else {
-            return
+    func takePhoto() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (success) in
+                    if success {
+                        self.showCamera()
+                    }
+                    else {
+                        let alertController = UIAlertController(title: "Could not Open Camera", message: "Please make sure that this app has permission to access the camera in Settings.", preferredStyle: .alert)
+                        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        let settingsButton = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
+                            guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else {
+                                return
+                            }
+                            UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+                        })
+                        
+                        alertController.addAction(cancelButton)
+                        alertController.addAction(settingsButton)
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                })
+       }
+        else {
+            let alertController = UIAlertController(title: "Could not Open Camera", message: "The camera could not be accessed at this time.", preferredStyle: .alert)
+            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cancelButton)
         }
-        
-        add(image: image)
-        // TODO: ask permission before presenting
-        // if UIImagePickerController.isSourceTypeAvailable(.camera) {
-        //     let imagePickerController = UIImagePickerController()
-        //     imagePickerController.sourceType = .camera
-        //     imagePickerController.delegate = self
-        //     present(imagePickerController, animated: true, completion: nil)
-        // }
-        // else if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-        //      let imagePickerController = UIImagePickerController()
-        //     imagePickerController.sourceType = .photoLibrary
-        //     imagePickerController.delegate = self
-        //     present(imagePickerController, animated: true, completion: nil)
-        // }
+    }
+    
+    func pickImage() {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                switch status {
+                case .authorized:
+                    self.showPhotoLibrary()
+                default:
+                    let alertController = UIAlertController(title: "Could not Access the Photo Library", message: "Please make sure that this app has permission in Settings to access the photo library.", preferredStyle: .alert)
+                    let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    let settingsButton = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
+                        guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else {
+                            return
+                        }
+                        UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+                    })
+                    
+                    alertController.addAction(cancelButton)
+                    alertController.addAction(settingsButton)
+                    
+                    self.present(alertController, animated: true, completion: nil)        
+                }
+            })
+        }
+        else {
+            let alertController = UIAlertController(title: "Could not Access the Photo Library", message: "The photo library could not be accessed at this time.", preferredStyle: .alert)
+            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cancelButton)
+        }
+    }
+
+    func showCamera() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .camera
+        imagePickerController.showsCameraControls = false;
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    func showPhotoLibrary() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true, completion: nil)
     }
     
     // remove all transforms on the selected image and place it in the center of the screen
@@ -147,6 +207,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         imageView.verticalConstraint.isActive = true
         
         let views: [String : Any] = [ "image": imageView, "topLayoutGuide": topLayoutGuide ]
+        // TODO: need a max size; set with aspect ratio
         let imageSize = imageView.intrinsicContentSize
         let metrics = [ "height": imageSize.height, "width": imageSize.width ]
         
@@ -154,14 +215,17 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:[image(==width)]", options: [], metrics: metrics, views: views))
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(moveImage(gesture:)))
+        pan.maximumNumberOfTouches = 1
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(scaleImage(gesture:)))
         let rotate = UIRotationGestureRecognizer(target: self, action: #selector(rotateImage(gesture:)))
         let tap = UITapGestureRecognizer(target: self, action: #selector(selectImage(gesture:)))
         
         imageView.addGestureRecognizer(pan)
         imageView.addGestureRecognizer(pinch)
-        imageView.addGestureRecognizer(rotate) 
+        imageView.addGestureRecognizer(rotate)
         imageView.addGestureRecognizer(tap)
+        
+        select(imageView: imageView)
     }
     
     
@@ -176,5 +240,10 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         add(image: image)
         dismiss(animated: true, completion: nil)
     }
+    
+    // MARK:- UIGestureRecognizerDelegate
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }
-
