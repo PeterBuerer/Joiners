@@ -13,6 +13,9 @@
 		D01DA8D41DC958CA00C3A4D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */; };
 		D01DA8DC1DC95ED700C3A4D6 /* vapeNaysh.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */; };
 		D02521271DCD570A006A4C4B /* JoinerImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02521261DCD570A006A4C4B /* JoinerImageView.swift */; };
+		D06445811E840AB30048B448 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06445801E840AB30048B448 /* MenuController.swift */; };
+		D070121D1E82CF6000C8B7E4 /* Joiners.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D070121B1E82CF6000C8B7E4 /* Joiners.xcdatamodeld */; };
+		D08FE2D11E82FF120039821F /* NSPersistentContainer+Joiners.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08FE2D01E82FF120039821F /* NSPersistentContainer+Joiners.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		D01DA8D51DC958CA00C3A4D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = vapeNaysh.jpeg; sourceTree = "<group>"; };
 		D02521261DCD570A006A4C4B /* JoinerImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinerImageView.swift; sourceTree = "<group>"; };
+		D06445801E840AB30048B448 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		D070121C1E82CF6000C8B7E4 /* Joiners.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Joiners.xcdatamodel; sourceTree = "<group>"; };
+		D08FE2D01E82FF120039821F /* NSPersistentContainer+Joiners.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentContainer+Joiners.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,13 +62,15 @@
 		D01DA8C81DC958CA00C3A4D6 /* Joiners */ = {
 			isa = PBXGroup;
 			children = (
+				D070121B1E82CF6000C8B7E4 /* Joiners.xcdatamodeld */,
 				D01DA8C91DC958CA00C3A4D6 /* AppDelegate.swift */,
-				D01DA8CB1DC958CA00C3A4D6 /* CanvasController.swift */,
+				D06445821E841BD60048B448 /* ViewControllers */,
 				D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */,
 				D01DA8DE1DC95EFA00C3A4D6 /* Resources */,
 				D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */,
 				D01DA8D51DC958CA00C3A4D6 /* Info.plist */,
 				D02521261DCD570A006A4C4B /* JoinerImageView.swift */,
+				D08FE2D01E82FF120039821F /* NSPersistentContainer+Joiners.swift */,
 			);
 			path = Joiners;
 			sourceTree = "<group>";
@@ -73,6 +81,15 @@
 				D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		D06445821E841BD60048B448 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D01DA8CB1DC958CA00C3A4D6 /* CanvasController.swift */,
+				D06445801E840AB30048B448 /* MenuController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,6 +167,9 @@
 			files = (
 				D01DA8CC1DC958CA00C3A4D6 /* CanvasController.swift in Sources */,
 				D02521271DCD570A006A4C4B /* JoinerImageView.swift in Sources */,
+				D08FE2D11E82FF120039821F /* NSPersistentContainer+Joiners.swift in Sources */,
+				D070121D1E82CF6000C8B7E4 /* Joiners.xcdatamodeld in Sources */,
+				D06445811E840AB30048B448 /* MenuController.swift in Sources */,
 				D01DA8CA1DC958CA00C3A4D6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,6 +329,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D070121B1E82CF6000C8B7E4 /* Joiners.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D070121C1E82CF6000C8B7E4 /* Joiners.xcdatamodel */,
+			);
+			currentVersion = D070121C1E82CF6000C8B7E4 /* Joiners.xcdatamodel */;
+			path = Joiners.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D01DA8BE1DC958CA00C3A4D6 /* Project object */;
 }

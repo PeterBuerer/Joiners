@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import Photos
+import CoreData
 
 class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     private var selectedImage: JoinerImageView?
