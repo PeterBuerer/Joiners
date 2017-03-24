@@ -11,21 +11,19 @@ import AVFoundation
 import Photos
 import CoreData
 
+typealias CanvasControllerCompletion = () -> Void
+
 class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate {
     private var selectedImage: JoinerImageView?
     private var imageViews = [JoinerImageView]()
     private var joiner: Joiner
     private var container: NSPersistentContainer
+    private var completion: CanvasControllerCompletion
     
-    init(_ joiner: Joiner, container: NSPersistentContainer) {
+    init(_ joiner: Joiner, container: NSPersistentContainer, completion: @escaping CanvasControllerCompletion) {
         self.joiner = joiner
-        // TODO: remove
-//        if self.joiner == nil {
-//            // TODO: make this so it does something if the cast fails. OR make self.joiner non-optional and put the responsibility of adding a new Joiner to the DB on the thing initializing this VC <---------
-//            self.joiner = NSEntityDescription.insertNewObject(forEntityName: "Joiner", into: container.viewContext) as? Joiner
-//        }
-        
         self.container = container
+        self.completion = completion
         super.init(nibName: nil, bundle: nil)
         
         let addItem = UIBarButtonItem(title: "Library", style: .plain, target: self, action: #selector(pickImage))
@@ -52,24 +50,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         print("Setup joiner images for: \(joiner)")
         populateCanvas(seedJoiner: joiner)
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        guard let joiner = joiner, let joinerImages = joiner.images else {
-//            return
-//        }
-//        
-//        // update transforms once views are layoute
-//        // TODO: better way to do this?
-//        for (index, joinerImage) in joinerImages.enumerated() {
-//            guard let joinerImage = joinerImage as? JoinerImage else {
-//                continue
-//            }
-//            let scale = JoinerImage.calculateStartingScaleFrom(delta: joinerImage.scaleDelta)
-//            let imageView = imageViews[index]
-//            imageView.transform = imageView.transform.scaledBy(x: CGFloat(scale), y: CGFloat(scale))
-//        }
-//    }
+   
     
     // MARK: - Actions
     
@@ -117,17 +98,8 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             return
         }
         
-        // TODO: make this a method on JoinerImageView?
         imageView.transform = imageView.transform.scaledBy(x: gesture.scale, y: gesture.scale)
         gesture.scale = 1
-        
-        // TODO: Remove this?
-//        guard let joinerImage = imageView.joinerImage else {
-//           return
-//        }
-        
-//        joinerImage.scaleDelta = JoinerImage.deltaFrom(scale: joinerImage.scaleDelta, delta: Float(gesture.scale))
-//        print("Scale delta: \(joinerImage.scaleDelta)")
     }
     
     func rotateImage(gesture: UIRotationGestureRecognizer) {
@@ -246,9 +218,9 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             let successfulSave = self.container.save()
             if !successfulSave {
                 print("Couldn't save Joiner")
-                //TODO: do something else??
+                //TODO: do something else??...show dialog saying couldn't save?
             }
-            self.dismiss(animated: true, completion: nil)
+            self.completion()
         }
         
         // save new joiner from current images

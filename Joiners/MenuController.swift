@@ -16,7 +16,8 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
     init(container: NSPersistentContainer) {
         self.container = container
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Joiner")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        // TODO: see if "couldn't read cache file to update store info timestamps" thing is fixed...
         self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: nil, cacheName: "JoinerResultsCache")
         super.init(nibName: nil, bundle: nil)
         
@@ -30,24 +31,17 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-   
-    // MARK:- NSFetchedResultsControllerDelegate
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        // TODO: find a saner way to refresh the menu list. This is stupid.
-        fetchData()
-        tableView.reloadData()
-    }
-    
+
     
     // MARK:- Actions
     
     func fetchData() {
         do {
             try fetchedResultsController.performFetch()
+            tableView.reloadData()
         }
         catch let error {
+            // TODO: show dialog saying "Could not refresh Joiner list...add manual way to refresh??..seems weird to do that with no networking aspect though
             print("Error: \(error.localizedDescription)")
         }
     }
@@ -59,7 +53,12 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
             fatalError("Could not creat new Joiner")
         }
         
-        let canvas = CanvasController(joiner, container: container)
+        // TODO: make non-optional in DB?
+        joiner.creationDate = NSDate()
+        let canvas = CanvasController(joiner, container: container, completion: { [unowned self] in
+            self.fetchData()
+            self.dismiss(animated: true, completion: nil)
+        })
         let canvasNavigationController = UINavigationController(rootViewController: canvas)
         present(canvasNavigationController, animated: true)
     }
@@ -94,7 +93,10 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
             return
         }
         
-        let canvas = CanvasController(joiner, container: container)
+        let canvas = CanvasController(joiner, container: container, completion: { [unowned self] in
+            self.fetchData()
+            self.dismiss(animated: true, completion: nil)
+        })
         let canvasNavigationController = UINavigationController(rootViewController: canvas)
         present(canvasNavigationController, animated: true)
     }
