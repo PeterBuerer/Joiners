@@ -6,15 +6,14 @@
     </entity>
     <entity name="JoinerImage" representedClassName=".JoinerImage" syncable="YES" codeGenerationType="class">
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="rotation" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="scale" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="transform" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="xPosition" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="yPosition" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="yPosition" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="zIndex" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="joiner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Joiner" inverseName="images" inverseEntity="Joiner" syncable="YES"/>
     </entity>
     <elements>
         <element name="Joiner" positionX="-243" positionY="-15" width="128" height="75"/>
-        <element name="JoinerImage" positionX="-63" positionY="-9" width="128" height="148"/>
+        <element name="JoinerImage" positionX="-63" positionY="-9" width="128" height="135"/>
     </elements>
 </model>

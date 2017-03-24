@@ -9,6 +9,7 @@
 import UIKit
 
 class JoinerImageView: UIImageView {
+    var joinerImage: JoinerImage?
     var horizontalConstraint = NSLayoutConstraint()
     var verticalConstraint = NSLayoutConstraint()
     var selected = false {
@@ -22,8 +23,9 @@ class JoinerImageView: UIImageView {
         }
     }
     
-    convenience init() {
+    convenience init(joinerImage: JoinerImage) {
         self.init(frame: .zero)
+        self.joinerImage = joinerImage
     }
     
     override init(frame: CGRect) {

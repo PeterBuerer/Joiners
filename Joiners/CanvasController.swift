@@ -11,16 +11,29 @@ import AVFoundation
 import Photos
 import CoreData
 
-class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate {
     private var selectedImage: JoinerImageView?
+    private var imageViews = [JoinerImageView]()
+    private var joiner: Joiner
+    private var container: NSPersistentContainer
     
-    init() {
+    init(_ joiner: Joiner, container: NSPersistentContainer) {
+        self.joiner = joiner
+        // TODO: remove
+//        if self.joiner == nil {
+//            // TODO: make this so it does something if the cast fails. OR make self.joiner non-optional and put the responsibility of adding a new Joiner to the DB on the thing initializing this VC <---------
+//            self.joiner = NSEntityDescription.insertNewObject(forEntityName: "Joiner", into: container.viewContext) as? Joiner
+//        }
+        
+        self.container = container
         super.init(nibName: nil, bundle: nil)
+        
         let addItem = UIBarButtonItem(title: "Library", style: .plain, target: self, action: #selector(pickImage))
         let takePhotoItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(takePhoto))
-        let resetItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(resetImage)) 
+        let resetItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(resetImage))
+        let saveItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveJoiner))
         
-        let rightItems = [takePhotoItem, addItem]
+        let rightItems = [saveItem, takePhotoItem, addItem]
         navigationItem.rightBarButtonItems = rightItems
         navigationItem.leftBarButtonItem = resetItem
         
@@ -35,14 +48,35 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        print("Setup joiner images for: \(joiner)")
+        populateCanvas(seedJoiner: joiner)
     }
+    
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        guard let joiner = joiner, let joinerImages = joiner.images else {
+//            return
+//        }
+//        
+//        // update transforms once views are layoute
+//        // TODO: better way to do this?
+//        for (index, joinerImage) in joinerImages.enumerated() {
+//            guard let joinerImage = joinerImage as? JoinerImage else {
+//                continue
+//            }
+//            let scale = JoinerImage.calculateStartingScaleFrom(delta: joinerImage.scaleDelta)
+//            let imageView = imageViews[index]
+//            imageView.transform = imageView.transform.scaledBy(x: CGFloat(scale), y: CGFloat(scale))
+//        }
+//    }
     
     // MARK: - Actions
     
     var startPoint = CGPoint.zero
     func moveImage(gesture: UIPanGestureRecognizer) {
         guard let imageView = gesture.view as? JoinerImageView, imageView.selected else {
-            print("View not Joiner image")
+            print("View not Joiner image or not selected to move")
             return
         }
         
@@ -83,8 +117,17 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             return
         }
         
+        // TODO: make this a method on JoinerImageView?
         imageView.transform = imageView.transform.scaledBy(x: gesture.scale, y: gesture.scale)
-        gesture.scale = 1;
+        gesture.scale = 1
+        
+        // TODO: Remove this?
+//        guard let joinerImage = imageView.joinerImage else {
+//           return
+//        }
+        
+//        joinerImage.scaleDelta = JoinerImage.deltaFrom(scale: joinerImage.scaleDelta, delta: Float(gesture.scale))
+//        print("Scale delta: \(joinerImage.scaleDelta)")
     }
     
     func rotateImage(gesture: UIRotationGestureRecognizer) {
@@ -185,15 +228,70 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         present(imagePickerController, animated: true, completion: nil)
     }
     
+    func saveJoiner() {
+        print("Save new joiner")
+        let saveBlock = { [unowned self] in
+            for imageView in self.imageViews {
+                guard let joinerImage = imageView.joinerImage else {
+                    print("No JoinerImage found when trying to save ImageView")
+                    continue
+                }
+                
+                joinerImage.joiner = self.joiner
+                joinerImage.transform = NSStringFromCGAffineTransform(imageView.transform)
+                joinerImage.xPosition = Double(imageView.horizontalConstraint.constant)
+                joinerImage.yPosition = Double(imageView.verticalConstraint.constant)
+            }
+            
+            let successfulSave = self.container.save()
+            if !successfulSave {
+                print("Couldn't save Joiner")
+                //TODO: do something else??
+            }
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        // save new joiner from current images
+        
+        // TODO: find nice way to check if the save dialog was cancelled so this V garbage filter (which doesn't work if they type something) can be thrown out...or just prompt for possible name change each time they save...
+        
+        if (joiner.name != "" && joiner.name != nil) {
+            saveBlock();
+            return
+        }
+        else {
+            // get name and save
+            let alertController = UIAlertController(title: "Save Joiner", message: "What would you like to call this Joiner?", preferredStyle: .alert)
+            alertController.addTextField(configurationHandler: { [unowned self] (textfield) in
+                textfield.delegate = self
+            })
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
+                // save to db and show menu
+                saveBlock();
+            }))
+            
+            present(alertController, animated: true)
+        }
+    }
+    
+    
+    // MARK:- Save Joiner UITextFieldDelegate
+   
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+        joiner.name = textField.text
+    }
+    
+    
     // remove all transforms on the selected image and place it in the center of the screen
     func resetImage() {
         selectedImage?.horizontalConstraint.constant = 0
         selectedImage?.verticalConstraint.constant = 0
         selectedImage?.transform = .identity
     }
-   
-    func add(image: UIImage) {
-        let imageView = JoinerImageView()
+    
+    func addImageViewFor(image: UIImage, joinerImage: JoinerImage) -> JoinerImageView? {
+        let imageView = JoinerImageView(joinerImage: joinerImage)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
         imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
@@ -226,7 +324,67 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         imageView.addGestureRecognizer(rotate)
         imageView.addGestureRecognizer(tap)
         
+        imageViews.append(imageView)
+        return imageView
+    }
+   
+    // only call when adding a new image to the joiner
+    func add(image: UIImage) {
+        guard let newJoinerImage = NSEntityDescription.insertNewObject(forEntityName: "JoinerImage", into: container.viewContext) as? JoinerImage else {
+            print("Could not create JoinerImage Managed Object")
+            return
+        }
+        
+        // TODO: might make sense to put this in the save function where the rest of the data is offloaded to the Managed Object....?
+            // It is possible though that doing that with a lot of images would be very slow...
+        newJoinerImage.image = UIImagePNGRepresentation(image) as NSData?
+        
+        // make new JoinerImageView
+        guard let imageView = addImageViewFor(image: image, joinerImage: newJoinerImage) else {
+            // TODO: remove the JoinerImage you just made for this JoinerImageView....and tell the user...
+            print("Could not add Imageview for JoinerImage")
+            return
+        }
+        
         select(imageView: imageView)
+    }
+    
+    func populateCanvas(seedJoiner: Joiner) {
+        guard let joinerImages = seedJoiner.images else {
+            print("No JoinerImages in seed Joiner")
+            return
+        }
+       
+        for joinerImage in joinerImages {
+            guard let joinerImage = joinerImage as? JoinerImage else {
+                print("Could not cast Managed Object to JoinerImage")
+                continue
+            }
+            
+            guard let imageData = joinerImage.image as? Data else {
+                print("No image data from JoinerImage")
+                continue
+            }
+            
+            guard let image = UIImage(data: imageData) else {
+                print("Could not make UIImage from Joiner image data")
+                continue
+            }
+            
+            guard let imageView = addImageViewFor(image: image, joinerImage: joinerImage) else {
+                print("Could not add ImageView")
+                return
+            }
+            
+            guard let transform = joinerImage.transform else {
+                print("Could not get transform string from JoinerImage")
+                return
+            }
+            
+            imageView.transform = CGAffineTransformFromString(transform)
+            imageView.horizontalConstraint.constant = CGFloat(joinerImage.xPosition)
+            imageView.verticalConstraint.constant = CGFloat(joinerImage.yPosition)
+        }
     }
     
     
@@ -234,6 +392,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            print("Could not get image from image picker")
             dismiss(animated: true, completion: nil)
             return
         }

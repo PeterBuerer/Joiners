@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MenuController: UITableViewController {
+class MenuController: UITableViewController, NSFetchedResultsControllerDelegate {
     private let cellIdentifier = "MenuCellIdentifier"
     private let fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>
     private var container: NSPersistentContainer
@@ -18,14 +18,10 @@ class MenuController: UITableViewController {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Joiner")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: nil, cacheName: "JoinerResultsCache")
-        do {
-            try fetchedResultsController.performFetch()
-        }
-        catch let error {
-            print("Error: \(error.localizedDescription)")
-        }
-        
         super.init(nibName: nil, bundle: nil)
+        
+        self.fetchedResultsController.delegate = self
+        self.fetchData()
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addJoiner))
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
@@ -35,20 +31,37 @@ class MenuController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        view.addSubview(tableView)
-//        let views = ["table": tableView]
-//        NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: topLayoutGuide, attribute: .bottom, multiplier: 1.0, constant: 0.0).isActive = true
-//        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:[table]|", options: [], metrics: nil, views: views))
-//        NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[table]|", options: [], metrics: nil, views: views))
-//    }
    
+    // MARK:- NSFetchedResultsControllerDelegate
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        // TODO: find a saner way to refresh the menu list. This is stupid.
+        fetchData()
+        tableView.reloadData()
+    }
+    
     
     // MARK:- Actions
     
+    func fetchData() {
+        do {
+            try fetchedResultsController.performFetch()
+        }
+        catch let error {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
     func addJoiner() {
-        print("add Joiner")
+        // TODO: handle the case where they make a new Joiner, and don't want to save it...
+        guard let joiner = NSEntityDescription.insertNewObject(forEntityName: "Joiner", into: container.viewContext) as? Joiner else {
+            // TODO: show dialog saying couldn't create new joiner???..
+            fatalError("Could not creat new Joiner")
+        }
+        
+        let canvas = CanvasController(joiner, container: container)
+        let canvasNavigationController = UINavigationController(rootViewController: canvas)
+        present(canvasNavigationController, animated: true)
     }
     
     // MARK:- UITableViewDataSource
@@ -76,18 +89,13 @@ class MenuController: UITableViewController {
     // MARK:- UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: present canvas
+        guard let joiner = fetchedResultsController.fetchedObjects?[indexPath.row] as? Joiner else {
+            print("No joiner at index: \(indexPath.row)")
+            return
+        }
+        
+        let canvas = CanvasController(joiner, container: container)
+        let canvasNavigationController = UINavigationController(rootViewController: canvas)
+        present(canvasNavigationController, animated: true)
     }
-    
-    
-    // MARK:- Views
-//    
-//    lazy var tableView: UITableView = {
-//        let table = UITableView(frame: CGRect.zero, style: .plain)
-//        table.translatesAutoresizingMaskIntoConstraints = false
-//        table.delegate = self
-//        table.dataSource = self
-//        table.register(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
-//        return table
-//    }()
 }
