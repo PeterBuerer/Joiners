@@ -218,9 +218,17 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             let successfulSave = self.container.save()
             if !successfulSave {
                 print("Couldn't save Joiner")
-                //TODO: do something else??...show dialog saying couldn't save?
+                // Give option to quit even though the save failed
+                let alertController = UIAlertController(title: "Error", message: "Could not save joiner", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alertController.addAction(UIAlertAction(title: "Leave without saving", style: .destructive, handler: { [unowned self] (action) in
+                    self.completion()
+                }))
+                self.present(alertController, animated: true, completion: nil)
             }
-            self.completion()
+            else {
+                self.completion()
+            }
         }
         
         // save new joiner from current images
