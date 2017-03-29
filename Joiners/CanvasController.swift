@@ -20,6 +20,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     private var container: NSPersistentContainer
     private var completion: CanvasControllerCompletion
     
+    // TODO: Create an abstraction layer between the database and the view controller so that this isn't tied to Core Data
     init(_ joiner: Joiner, container: NSPersistentContainer, completion: @escaping CanvasControllerCompletion) {
         self.joiner = joiner
         self.container = container
@@ -127,7 +128,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     
     func takePhoto() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (success) in
+                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { [unowned self] (success) in
                     if success {
                         self.showCamera()
                     }
@@ -157,7 +158,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     
     func pickImage() {
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            PHPhotoLibrary.requestAuthorization({ (status) in
+            PHPhotoLibrary.requestAuthorization({ [unowned self] (status) in
                 switch status {
                 case .authorized:
                     self.showPhotoLibrary()
@@ -184,11 +185,13 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             alertController.addAction(cancelButton)
         }
     }
+    
+    // TODO: Figure out why the camera and photo library take forever to present
 
     func showCamera() {
         let imagePickerController = UIImagePickerController()
         imagePickerController.sourceType = .camera
-        imagePickerController.showsCameraControls = false;
+        imagePickerController.showsCameraControls = true;
         imagePickerController.delegate = self
         present(imagePickerController, animated: true, completion: nil)
     }
@@ -201,7 +204,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
     }
     
     func saveJoiner() {
-        print("Save new joiner")
+        print("Save joiner")
         let saveBlock = { [unowned self] in
             for imageView in self.imageViews {
                 guard let joinerImage = imageView.joinerImage else {
@@ -215,7 +218,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
                 joinerImage.yPosition = Double(imageView.verticalConstraint.constant)
             }
             
-            let successfulSave = self.container.save()
+            let successfulSave = self.container.saveViewContext()
             if !successfulSave {
                 print("Couldn't save Joiner")
                 // Give option to quit even though the save failed
@@ -283,7 +286,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         imageView.verticalConstraint.isActive = true
         
         let views: [String : Any] = [ "image": imageView, "topLayoutGuide": topLayoutGuide ]
-        // TODO: need a max size; set with aspect ratio
+        // TODO: need a max size and to scale down huge images so they don't fill up the screen when added
         let imageSize = imageView.intrinsicContentSize
         let metrics = [ "height": imageSize.height, "width": imageSize.width ]
         
@@ -314,7 +317,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         
         // TODO: might make sense to put this in the save function where the rest of the data is offloaded to the Managed Object....?
             // It is possible though that doing that with a lot of images would be very slow...
-        newJoinerImage.image = UIImagePNGRepresentation(image) as NSData?
+        newJoinerImage.image = UIImageJPEGRepresentation(image, 1.0) as NSData? // Note: JPEG saves rotation data. PNG sets exif and you have to do rotation yourself
         
         // make new JoinerImageView
         guard let imageView = addImageViewFor(image: image, joinerImage: newJoinerImage) else {
@@ -332,6 +335,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             return
         }
        
+        // TODO: warn user if anything in this fails?
         for joinerImage in joinerImages {
             guard let joinerImage = joinerImage as? JoinerImage else {
                 print("Could not cast Managed Object to JoinerImage")

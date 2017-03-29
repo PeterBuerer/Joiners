@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         let vc = MenuController(container: NSPersistentContainer.joinerContainer)
         let nav = UINavigationController(rootViewController: vc)
-        
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         

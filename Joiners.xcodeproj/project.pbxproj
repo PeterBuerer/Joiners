@@ -11,7 +11,6 @@
 		D01DA8CC1DC958CA00C3A4D6 /* CanvasController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01DA8CB1DC958CA00C3A4D6 /* CanvasController.swift */; };
 		D01DA8D11DC958CA00C3A4D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */; };
 		D01DA8D41DC958CA00C3A4D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */; };
-		D01DA8DC1DC95ED700C3A4D6 /* vapeNaysh.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */; };
 		D02521271DCD570A006A4C4B /* JoinerImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02521261DCD570A006A4C4B /* JoinerImageView.swift */; };
 		D06445811E840AB30048B448 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06445801E840AB30048B448 /* MenuController.swift */; };
 		D070121D1E82CF6000C8B7E4 /* Joiners.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D070121B1E82CF6000C8B7E4 /* Joiners.xcdatamodeld */; };
@@ -25,7 +24,6 @@
 		D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D01DA8D31DC958CA00C3A4D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D01DA8D51DC958CA00C3A4D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = vapeNaysh.jpeg; sourceTree = "<group>"; };
 		D02521261DCD570A006A4C4B /* JoinerImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinerImageView.swift; sourceTree = "<group>"; };
 		D06445801E840AB30048B448 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
 		D070121C1E82CF6000C8B7E4 /* Joiners.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Joiners.xcdatamodel; sourceTree = "<group>"; };
@@ -65,22 +63,13 @@
 				D070121B1E82CF6000C8B7E4 /* Joiners.xcdatamodeld */,
 				D01DA8C91DC958CA00C3A4D6 /* AppDelegate.swift */,
 				D06445821E841BD60048B448 /* ViewControllers */,
+				D0E731781E8C59550052E0C7 /* Views */,
+				D0E731791E8C59650052E0C7 /* Extensions */,
 				D01DA8D01DC958CA00C3A4D6 /* Assets.xcassets */,
-				D01DA8DE1DC95EFA00C3A4D6 /* Resources */,
 				D01DA8D21DC958CA00C3A4D6 /* LaunchScreen.storyboard */,
 				D01DA8D51DC958CA00C3A4D6 /* Info.plist */,
-				D02521261DCD570A006A4C4B /* JoinerImageView.swift */,
-				D08FE2D01E82FF120039821F /* NSPersistentContainer+Joiners.swift */,
 			);
 			path = Joiners;
-			sourceTree = "<group>";
-		};
-		D01DA8DE1DC95EFA00C3A4D6 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				D01DA8DB1DC95ED700C3A4D6 /* vapeNaysh.jpeg */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		D06445821E841BD60048B448 /* ViewControllers */ = {
@@ -90,6 +79,22 @@
 				D06445801E840AB30048B448 /* MenuController.swift */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D0E731781E8C59550052E0C7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D02521261DCD570A006A4C4B /* JoinerImageView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		D0E731791E8C59650052E0C7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D08FE2D01E82FF120039821F /* NSPersistentContainer+Joiners.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,7 +157,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D01DA8DC1DC95ED700C3A4D6 /* vapeNaysh.jpeg in Resources */,
 				D01DA8D41DC958CA00C3A4D6 /* LaunchScreen.storyboard in Resources */,
 				D01DA8D11DC958CA00C3A4D6 /* Assets.xcassets in Resources */,
 			);

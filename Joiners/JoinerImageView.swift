@@ -31,13 +31,15 @@ class JoinerImageView: UIImageView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        // TODO: maybe have a highlight view that covers the image instead of a border to indicate selection
+        
         addSubview(topBorder)
         addSubview(bottomBorder)
         addSubview(leftBorder)
         addSubview(rightBorder)
         
         let views = [ "top": topBorder, "bottom": bottomBorder, "left": leftBorder, "right": rightBorder ]
-        let metrics = [ "width": 2.0 ]
+        let metrics = [ "width": 8.0 ]
         
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:|[top(==width)]", options: [], metrics: metrics, views: views))
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:|[top]|", options: [], metrics: metrics, views: views))

@@ -13,6 +13,8 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
     private let cellIdentifier = "MenuCellIdentifier"
     private let fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>
     private var container: NSPersistentContainer
+    
+   // TODO: Create an abstraction layer between the database and the view controller so that this isn't tied to Core Data
     init(container: NSPersistentContainer) {
         self.container = container
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Joiner")
@@ -53,11 +55,15 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
             fatalError("Could not creat new Joiner")
         }
         
-        // TODO: make non-optional in DB?
+        // TODO: make non-optional in database?
         joiner.creationDate = NSDate()
-        let canvas = CanvasController(joiner, container: container, completion: { [unowned self] in
-            self.fetchData()
-            self.dismiss(animated: true, completion: nil)
+        let canvas = CanvasController(joiner, container: container, completion: { [weak self] in
+            // I don't think the weak capture is necessary but not 100% on that
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.fetchData()
+            strongSelf.dismiss(animated: true, completion: nil)
         })
         let canvasNavigationController = UINavigationController(rootViewController: canvas)
         present(canvasNavigationController, animated: true)
@@ -93,9 +99,12 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
             return
         }
         
-        let canvas = CanvasController(joiner, container: container, completion: { [unowned self] in
-            self.fetchData()
-            self.dismiss(animated: true, completion: nil)
+        let canvas = CanvasController(joiner, container: container, completion: { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.fetchData()
+            strongSelf.dismiss(animated: true, completion: nil)
         })
         let canvasNavigationController = UINavigationController(rootViewController: canvas)
         present(canvasNavigationController, animated: true)
