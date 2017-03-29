@@ -233,26 +233,23 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         
         // save new joiner from current images
         
-        // TODO: find nice way to check if the save dialog was cancelled so this V garbage filter (which doesn't work if they type something) can be thrown out...or just prompt for possible name change each time they save...
-        
-        if (joiner.name != "" && joiner.name != nil) {
+        // keep the current name in case they type stuff and hit cancel
+        let preSaveName = joiner.name
+        // get name and save
+        let alertController = UIAlertController(title: "Save Joiner", message: "What would you like to call this Joiner?", preferredStyle: .alert)
+        alertController.addTextField(configurationHandler: { [unowned self] (textfield) in
+            textfield.delegate = self
+            textfield.text = self.joiner.name
+        })
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { [unowned self] (action) in
+            self.joiner.name = preSaveName
+        }))
+        alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
+            // save to db and show menu
             saveBlock();
-            return
-        }
-        else {
-            // get name and save
-            let alertController = UIAlertController(title: "Save Joiner", message: "What would you like to call this Joiner?", preferredStyle: .alert)
-            alertController.addTextField(configurationHandler: { [unowned self] (textfield) in
-                textfield.delegate = self
-            })
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
-                // save to db and show menu
-                saveBlock();
-            }))
-            
-            present(alertController, animated: true)
-        }
+        }))
+        
+        present(alertController, animated: true)
     }
     
     
