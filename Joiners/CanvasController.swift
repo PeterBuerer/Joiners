@@ -29,7 +29,7 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         
         let addItem = UIBarButtonItem(title: "Library", style: .plain, target: self, action: #selector(pickImage))
         let takePhotoItem = UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(takePhoto))
-        let resetItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(resetImage))
+        let resetItem = UIBarButtonItem(title: "Reset Image", style: .plain, target: self, action: #selector(resetImage))
         let saveItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveJoiner))
         
         let rightItems = [saveItem, takePhotoItem, addItem]
@@ -130,22 +130,26 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { [unowned self] (success) in
                     if success {
-                        self.showCamera()
+                        DispatchQueue.main.async {
+                            self.showCamera()
+                        }
                     }
                     else {
-                        let alertController = UIAlertController(title: "Could not Open Camera", message: "Please make sure that this app has permission to access the camera in Settings.", preferredStyle: .alert)
-                        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                        let settingsButton = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
-                            guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else {
-                                return
-                            }
-                            UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
-                        })
-                        
-                        alertController.addAction(cancelButton)
-                        alertController.addAction(settingsButton)
-                        
-                        self.present(alertController, animated: true, completion: nil)
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Could not Open Camera", message: "Please make sure that this app has permission to access the camera in Settings.", preferredStyle: .alert)
+                            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                            let settingsButton = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
+                                guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else {
+                                    return
+                                }
+                                UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+                            })
+                            
+                            alertController.addAction(cancelButton)
+                            alertController.addAction(settingsButton)
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 })
        }
@@ -161,21 +165,25 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             PHPhotoLibrary.requestAuthorization({ [unowned self] (status) in
                 switch status {
                 case .authorized:
-                    self.showPhotoLibrary()
+                    DispatchQueue.main.async {
+                        self.showPhotoLibrary()
+                    }
                 default:
-                    let alertController = UIAlertController(title: "Could not Access the Photo Library", message: "Please make sure that this app has permission in Settings to access the photo library.", preferredStyle: .alert)
-                    let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                    let settingsButton = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
-                        guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else {
-                            return
-                        }
-                        UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
-                    })
-                    
-                    alertController.addAction(cancelButton)
-                    alertController.addAction(settingsButton)
-                    
-                    self.present(alertController, animated: true, completion: nil)        
+                    DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "Could not Access the Photo Library", message: "Please make sure that this app has permission in Settings to access the photo library.", preferredStyle: .alert)
+                        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        let settingsButton = UIAlertAction(title: "Settings", style: .default, handler: { (action) in
+                            guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else {
+                                return
+                            }
+                            UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+                        })
+                        
+                        alertController.addAction(cancelButton)
+                        alertController.addAction(settingsButton)
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
                 }
             })
         }
@@ -270,7 +278,8 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         selectedImage?.transform = .identity
     }
     
-    func addImageViewFor(image: UIImage, joinerImage: JoinerImage) -> JoinerImageView? {
+    // TODO: Refactor so you only pass one image thing in. It is not clear when you read the types UIImage and JoinerImage that you can't just have a JoinerImage
+    func addImageViewFor(image: UIImage, joinerImage: JoinerImage, scaleToFit: Bool = true) -> JoinerImageView? {
         let imageView = JoinerImageView(joinerImage: joinerImage)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
@@ -284,11 +293,32 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
         
         imageView.horizontalConstraint.isActive = true
         imageView.verticalConstraint.isActive = true
-        
-        let views: [String : Any] = [ "image": imageView, "topLayoutGuide": topLayoutGuide ]
-        // TODO: need a max size and to scale down huge images so they don't fill up the screen when added
+       
         let imageSize = imageView.intrinsicContentSize
-        let metrics = [ "height": imageSize.height, "width": imageSize.width ]
+        var scaleRatio = CGFloat(1)
+        // scale images to fit screen
+        if scaleToFit {
+            // arbitrary borderOffset; just need some space between the edge of image and the edge of the view
+            let borderOffset = CGFloat(32.0)
+            // TODO: fix problem where the canvas' width/height information is pulled when portrait picker modal is up but canvas is in landscape
+                // Also, when populating an existing Joiner you aren't guaranteed that the orientation and view size will be the same   
+                // And there seems to be a difference if you save in landscape vs portrait (without moving the images)...Orientation stuff is probably going to be a big deal and there are likely lots of other scenarios to cover
+            let maxStartingWidth = view.frame.width - borderOffset
+            let maxStartingHeight = view.frame.height - borderOffset
+            
+            print("Maxstartwidth: \(maxStartingWidth) \nMaxstartheight: \(maxStartingHeight)")
+            print("Imagewidth: \(imageSize.width) \nImageHeight: \(imageSize.height)")
+            
+            let widthRatio = maxStartingWidth / imageSize.width
+            let heightRatio = maxStartingHeight / imageSize.height
+            scaleRatio = min(widthRatio, heightRatio)
+        }
+       
+        let startingWidth = imageSize.width * scaleRatio
+        let startingHeight = imageSize.height * scaleRatio
+        
+        let metrics = [ "width": startingWidth, "height": startingHeight]
+        let views: [String : Any] = ["image": imageView, "topLayoutGuide": topLayoutGuide]
         
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "V:[image(==height)]", options: [], metrics: metrics, views: views))
         NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "H:[image(==width)]", options: [], metrics: metrics, views: views))
