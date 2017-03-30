@@ -27,7 +27,7 @@ class MenuController: UITableViewController, NSFetchedResultsControllerDelegate 
         self.fetchData()
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addJoiner))
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -345,6 +345,8 @@ class CanvasController: UIViewController, UIImagePickerControllerDelegate, UINav
             return
         }
         
+        // TODO: add and manage a z-index so images at least show up in the same order they are added 
+        
         // TODO: might make sense to put this in the save function where the rest of the data is offloaded to the Managed Object....?
             // It is possible though that doing that with a lot of images would be very slow...
         newJoinerImage.image = UIImageJPEGRepresentation(image, 1.0) as NSData? // Note: JPEG saves rotation data. PNG sets exif and you have to do rotation yourself
